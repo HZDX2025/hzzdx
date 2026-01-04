@@ -1,0 +1,3043 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>汉责官网 · Study Supervisor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+SC:wght@200;300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #161616;
+            --text-primary: #f5f5f5;
+            --text-secondary: #888888;
+            --accent: #c9a86c;
+            --accent-light: #e8d4b0;
+            --border: #2a2a2a;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            font-family: 'Noto Serif SC', 'Cormorant Garamond', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            line-height: 1.8;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-text-size-adjust: 100%;
+            overscroll-behavior: none;
+        }
+
+        /* 花体字装饰线条 */
+        .flourish {
+            display: inline-block;
+            position: relative;
+        }
+
+        .flourish::before,
+        .flourish::after {
+            content: '';
+            position: absolute;
+            height: 1px;
+            width: 60px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            top: 50%;
+        }
+
+        .flourish::before {
+            right: 100%;
+            margin-right: 20px;
+        }
+
+        .flourish::after {
+            left: 100%;
+            margin-left: 20px;
+        }
+
+        /* 导航 */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(180deg, var(--bg-primary), transparent);
+            padding: 20px 40px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .logo span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.2em;
+            margin-left: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            transition: all 0.4s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-light);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+        }
+
+        /* 页面容器 */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-top: 100px;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 首页 */
+        .hero {
+            min-height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(201, 168, 108, 0.05) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 200;
+            letter-spacing: 0.4em;
+            margin-bottom: 20px;
+            font-style: italic;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.3em;
+            font-style: italic;
+            margin-bottom: 60px;
+        }
+
+        .decorative-line {
+            width: 1px;
+            height: 100px;
+            background: linear-gradient(180deg, var(--accent), transparent);
+            margin: 40px auto;
+        }
+
+        /* 人员简介 */
+        .section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 200;
+            letter-spacing: 0.3em;
+            margin-bottom: 60px;
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .staff-grid {
+            display: grid;
+            gap: 40px;
+        }
+
+        .staff-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .staff-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .staff-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .staff-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .staff-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .staff-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .staff-avatar-placeholder {
+            color: var(--text-secondary);
+            font-size: 2rem;
+            font-style: italic;
+        }
+
+        .staff-info {
+            flex: 1;
+        }
+
+        .staff-name {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .staff-title {
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            margin-bottom: 20px;
+        }
+
+        .staff-bio {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 2;
+        }
+
+        /* 价格列表 - 分类模块 */
+        .price-grid {
+            display: grid;
+            gap: 40px;
+        }
+
+        .price-category {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 30px;
+            position: relative;
+        }
+
+        .price-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .category-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .price-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .price-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 25px;
+            transition: all 0.4s ease;
+        }
+
+        .price-card:hover {
+            border-color: var(--accent);
+            background: var(--bg-card);
+            transform: translateY(-3px);
+        }
+
+        .price-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .price-info h3 {
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .price-info p {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .price-period-tag {
+            background: var(--accent);
+            color: var(--bg-primary);
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+        }
+
+        .price-amounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .price-item {
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+            padding: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+        }
+
+        .price-item:hover {
+            border-color: var(--accent);
+        }
+
+        .price-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+            margin-bottom: 5px;
+        }
+
+        .price-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .price-value span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .price-single {
+            text-align: right;
+        }
+
+        .price-amount {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .price-amount span {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .no-category-hint {
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+            padding: 60px 20px;
+        }
+
+        /* 活动页面样式 */
+        .activity-grid {
+            display: grid;
+            gap: 30px;
+        }
+
+        .activity-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .activity-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(201, 168, 108, 0.1);
+        }
+
+        .activity-card.expired {
+            opacity: 0.6;
+        }
+
+        .activity-card.expired::after {
+            content: '已结束';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #666;
+            color: white;
+            padding: 5px 40px;
+            font-size: 0.75rem;
+            transform: rotate(45deg);
+        }
+
+        .activity-header {
+            padding: 25px 30px;
+            background: linear-gradient(135deg, rgba(201, 168, 108, 0.1), transparent);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .activity-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+        .activity-tag.discount {
+            background: linear-gradient(135deg, #c9a86c, #e8d4b0);
+            color: var(--bg-primary);
+        }
+
+        .activity-tag.fullcut {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .activity-tag.recharge {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .activity-tag.special {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+        }
+
+        .activity-title {
+            font-size: 1.3rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .activity-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-badge {
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 8px 15px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            font-family: 'Cormorant Garamond', serif;
+            border-radius: 5px;
+        }
+
+        .activity-body {
+            padding: 25px 30px;
+        }
+
+        .activity-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .activity-rules {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+
+        .activity-rules-title {
+            font-size: 0.8rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .activity-rules-list {
+            list-style: none;
+        }
+
+        .activity-rules-list li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 5px 0;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .activity-rules-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .activity-footer {
+            padding: 15px 30px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-time span {
+            color: var(--accent);
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            border-radius: 3px;
+        }
+
+        .activity-status.active {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .activity-status.upcoming {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+        }
+
+        .activity-status.ended {
+            background: rgba(149, 165, 166, 0.2);
+            color: #95a5a6;
+        }
+
+        .no-activity-hint {
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+            padding: 80px 20px;
+        }
+
+        /* 活动类型选择样式 */
+        .activity-type-select {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .activity-type-option {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .activity-type-option:hover {
+            border-color: var(--accent);
+        }
+
+        .activity-type-option.selected {
+            border-color: var(--accent);
+            background: rgba(201, 168, 108, 0.1);
+            color: var(--accent);
+        }
+
+        .activity-type-option input {
+            display: none;
+        }
+
+        .dynamic-fields {
+            display: none;
+            padding: 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .dynamic-fields.show {
+            display: block;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .activity-type-select {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 支付页面 */
+        .payment-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .payment-tab {
+            padding: 15px 40px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            transition: all 0.4s ease;
+        }
+
+        .payment-tab.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--bg-card);
+        }
+
+        .payment-content {
+            display: none;
+            text-align: center;
+        }
+
+        .payment-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .qr-container {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 30px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .qr-placeholder {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+        }
+
+        .payment-note {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* 后台管理 */
+        .admin-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .admin-section-title {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            margin-bottom: 30px;
+            color: var(--accent);
+            font-style: italic;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .price-input-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .price-input-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 15px;
+        }
+
+        .price-input-item label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .price-input-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+        }
+
+        .price-input-item .form-input {
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: inherit;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-danger {
+            border-color: #c94c4c;
+            color: #c94c4c;
+        }
+
+        .btn-danger:hover {
+            background: #c94c4c;
+            color: var(--text-primary);
+        }
+
+        .item-list {
+            margin-top: 30px;
+        }
+
+        .item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .item-content h4 {
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 5px;
+        }
+
+        .item-content p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 20px;
+            font-size: 0.75rem;
+        }
+
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            padding: 15px 30px;
+            border: 1px dashed var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .file-label:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .file-preview {
+            width: 100px;
+            height: 100px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* 装饰元素 */
+        .corner-decor {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .corner-decor.top-left {
+            top: 20px;
+            left: 20px;
+            border-top: 1px solid var(--accent);
+            border-left: 1px solid var(--accent);
+        }
+
+        .corner-decor.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-bottom: 1px solid var(--accent);
+            border-right: 1px solid var(--accent);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 70px;
+            }
+
+            .nav {
+                padding: 15px 20px;
+                background: var(--bg-primary);
+            }
+
+            .nav-inner {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+                letter-spacing: 0.2em;
+            }
+
+            .logo span {
+                display: none;
+            }
+
+            /* 隐藏顶部导航链接，使用底部导航 */
+            .nav-links {
+                display: none !important;
+            }
+
+            /* 移动端底部导航栏 - 确保显示 */
+            .mobile-nav {
+                display: flex !important;
+            }
+
+            .hero {
+                min-height: calc(100vh - 140px);
+                padding: 20px;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+                letter-spacing: 0.15em;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 0.15em;
+            }
+
+            .decorative-line {
+                height: 60px;
+                margin: 25px auto;
+            }
+
+            .section {
+                padding: 30px 16px;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+                letter-spacing: 0.15em;
+                margin-bottom: 30px;
+            }
+
+            .flourish::before,
+            .flourish::after {
+                width: 30px;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            /* 监督员卡片 */
+            .staff-card {
+                flex-direction: column;
+                padding: 25px 20px;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .staff-avatar {
+                width: 90px;
+                height: 90px;
+                margin: 0 auto;
+            }
+
+            .staff-name {
+                font-size: 1.2rem;
+            }
+
+            .staff-title {
+                font-size: 0.8rem;
+            }
+
+            .staff-bio {
+                font-size: 0.85rem;
+                line-height: 1.8;
+            }
+
+            /* 价格卡片 */
+            .price-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 25px 20px;
+            }
+
+            .price-info h3 {
+                font-size: 1.1rem;
+            }
+
+            .price-amount {
+                font-size: 2rem;
+            }
+
+            /* 支付页面 */
+            .payment-tabs {
+                flex-direction: row;
+                gap: 15px;
+            }
+
+            .payment-tab {
+                padding: 12px 25px;
+                font-size: 0.8rem;
+            }
+
+            .qr-container {
+                width: 220px;
+                height: 220px;
+            }
+
+            /* 后台管理 */
+            .admin-section {
+                padding: 25px 20px;
+                margin-bottom: 25px;
+            }
+
+            .admin-section-title {
+                font-size: 1rem;
+                letter-spacing: 0.15em;
+            }
+
+            .form-input,
+            .form-textarea {
+                padding: 12px;
+                font-size: 16px; /* 防止iOS缩放 */
+            }
+
+            .form-label {
+                font-size: 0.8rem;
+            }
+
+            .btn {
+                padding: 14px 30px;
+                font-size: 0.85rem;
+                width: 100%;
+            }
+
+            .file-upload {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .file-label {
+                width: 100%;
+                text-align: center;
+                padding: 12px 20px;
+            }
+
+            .file-preview {
+                width: 80px;
+                height: 80px;
+            }
+
+            .item-card {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .item-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .btn-small {
+                padding: 10px 20px;
+                flex: 1;
+            }
+
+            .corner-decor {
+                display: none;
+            }
+
+            .page {
+                padding-top: 70px;
+            }
+
+            /* Toast */
+            .toast {
+                bottom: 90px;
+                padding: 12px 25px;
+                font-size: 0.8rem;
+                max-width: 90%;
+            }
+
+            /* 登录弹窗 */
+            .login-modal {
+                padding: 35px 25px;
+                margin: 20px;
+            }
+
+            .login-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* 桌面端隐藏移动导航 */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+            padding: 8px 0;
+            padding-bottom: calc(8px + env(safe-area-inset-bottom));
+        }
+
+        .mobile-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 4px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mobile-nav-item.active {
+            color: var(--accent);
+        }
+
+        .mobile-nav-item svg {
+            width: 22px;
+            height: 22px;
+            margin-bottom: 4px;
+            stroke-width: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav {
+                display: flex !important;
+            }
+            
+            .nav-links {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-nav {
+                display: none !important;
+            }
+            
+            .nav-links {
+                display: flex !important;
+            }
+        }
+
+        /* Toast 提示 */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            padding: 15px 40px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 登录弹窗 */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .login-modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 50px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        .login-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 200;
+            letter-spacing: 0.2em;
+            margin-bottom: 10px;
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .login-subtitle {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+            margin-bottom: 40px;
+        }
+
+        .login-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .login-close:hover {
+            color: var(--accent);
+        }
+
+        .login-error {
+            color: #c94c4c;
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        /* 加载动画 */
+        #globalLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* 设置指南 */
+        .setup-guide {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .setup-modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .setup-modal h3 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .setup-modal p, .setup-modal li {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .setup-modal ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .setup-modal pre {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 20px;
+            overflow-x: auto;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .setup-modal .btn {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="corner-decor top-left"></div>
+    <div class="corner-decor bottom-right"></div>
+
+    <!-- 移动端底部导航 -->
+    <div class="mobile-nav">
+        <a class="mobile-nav-item active" data-page="home">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            首页
+        </a>
+        <a class="mobile-nav-item" data-page="activity">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+            </svg>
+            活动
+        </a>
+        <a class="mobile-nav-item" data-page="price">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            价格
+        </a>
+        <a class="mobile-nav-item" data-page="payment">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75zM6.75 16.5h.75v.75h-.75v-.75zM16.5 6.75h.75v.75h-.75v-.75zM13.5 13.5h.75v.75h-.75v-.75zM13.5 19.5h.75v.75h-.75v-.75zM19.5 13.5h.75v.75h-.75v-.75zM19.5 19.5h.75v.75h-.75v-.75zM16.5 16.5h.75v.75h-.75v-.75z" />
+            </svg>
+            支付
+        </a>
+        <a class="mobile-nav-item" data-page="admin">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            管理
+        </a>
+    </div>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <div class="logo">
+                汉责官网
+                <span>Study Supervisor</span>
+            </div>
+            <div class="nav-links">
+                <a class="nav-link active" data-page="home">首页</a>
+                <a class="nav-link" data-page="activity">优惠活动</a>
+                <a class="nav-link" data-page="staff">监督员介绍</a>
+                <a class="nav-link" data-page="price">服务价格</a>
+                <a class="nav-link" data-page="payment">支付方式</a>
+                <a class="nav-link" data-page="admin">后台管理</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页 -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <h1 class="hero-title">汉责官网</h1>
+            <p class="hero-subtitle">— STUDY SUPERVISOR —</p>
+            <div class="decorative-line"></div>
+            <p style="color: var(--text-secondary); max-width: 500px; text-align: center; font-style: italic;">
+                以匠心之姿，陪伴每一位求学者<br>
+                在知识的长河中，寻找属于自己的光芒
+            </p>
+        </div>
+    </div>
+
+    <!-- 优惠活动页面 -->
+    <div id="activity" class="page">
+        <div class="section">
+            <h2 class="section-title flourish">优惠活动</h2>
+            <div id="activityList" class="activity-grid">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 人员简介 -->
+    <div id="staff" class="page">
+        <div class="section">
+            <h2 class="section-title flourish">监督员介绍</h2>
+            <div id="staffList" class="staff-grid">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 价格列表 -->
+    <div id="price" class="page">
+        <div class="section">
+            <h2 class="section-title flourish">服务价格</h2>
+            <div id="priceList" class="price-grid">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 支付页面 -->
+    <div id="payment" class="page">
+        <div class="section">
+            <h2 class="section-title flourish">支付方式</h2>
+            <div class="payment-tabs">
+                <button class="payment-tab active" data-payment="wechat">微信支付</button>
+                <button class="payment-tab" data-payment="alipay">支付宝</button>
+            </div>
+            <div id="wechat-content" class="payment-content active">
+                <div class="qr-container">
+                    <img id="wechat-qr" src="" alt="微信支付" style="display: none;">
+                    <span class="qr-placeholder" id="wechat-placeholder">请在后台上传微信收款码</span>
+                </div>
+                <p class="payment-note">请使用微信扫描上方二维码完成支付</p>
+            </div>
+            <div id="alipay-content" class="payment-content">
+                <div class="qr-container">
+                    <img id="alipay-qr" src="" alt="支付宝" style="display: none;">
+                    <span class="qr-placeholder" id="alipay-placeholder">请在后台上传支付宝收款码</span>
+                </div>
+                <p class="payment-note">请使用支付宝扫描上方二维码完成支付</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 后台管理 -->
+    <div id="admin" class="page">
+        <div class="section">
+            <h2 class="section-title flourish">后台管理</h2>
+            
+            <!-- 人员管理 -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">监督员管理</h3>
+                <div class="form-group">
+                    <label class="form-label">监督员头像</label>
+                    <div class="file-upload">
+                        <input type="file" id="staffAvatar" class="file-input" accept="image/*" onchange="previewStaffAvatar()">
+                        <label for="staffAvatar" class="file-label">点击上传头像</label>
+                        <div class="file-preview" id="staffAvatarPreview" style="border-radius: 50%;">
+                            <span style="color: var(--text-secondary); font-size: 0.75rem;">预览</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">监督员姓名</label>
+                    <input type="text" id="staffName" class="form-input" placeholder="请输入监督员姓名">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">监督员职称</label>
+                    <input type="text" id="staffTitle" class="form-input" placeholder="请输入监督员职称">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">监督员简介</label>
+                    <textarea id="staffBio" class="form-textarea" placeholder="请输入监督员简介"></textarea>
+                </div>
+                <button class="btn" onclick="addStaff()">添加监督员</button>
+                
+                <div id="adminStaffList" class="item-list"></div>
+            </div>
+
+            <!-- 价格管理 -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">价格分类管理</h3>
+                <div class="form-group">
+                    <label class="form-label">分类名称</label>
+                    <input type="text" id="categoryName" class="form-input" placeholder="如：基础督学、VIP督学、考研专项">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">分类描述</label>
+                    <input type="text" id="categoryDesc" class="form-input" placeholder="请输入分类描述">
+                </div>
+                <button class="btn" onclick="addCategory()">添加分类</button>
+                
+                <div id="adminCategoryList" class="item-list"></div>
+            </div>
+
+            <!-- 服务价格管理 -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">服务价格管理</h3>
+                <div class="form-group">
+                    <label class="form-label">选择分类</label>
+                    <select id="priceCategory" class="form-input">
+                        <option value="">请先添加分类</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">服务名称</label>
+                    <input type="text" id="serviceName" class="form-input" placeholder="如：一对一督学、小班督学">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">服务描述</label>
+                    <input type="text" id="serviceDesc" class="form-input" placeholder="请输入服务描述">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">价格设置</label>
+                    <div class="price-input-grid">
+                        <div class="price-input-item">
+                            <label><input type="checkbox" id="enableDay" checked> 按天</label>
+                            <input type="number" id="priceDay" class="form-input" placeholder="天价格">
+                        </div>
+                        <div class="price-input-item">
+                            <label><input type="checkbox" id="enableMonth" checked> 按月</label>
+                            <input type="number" id="priceMonth" class="form-input" placeholder="月价格">
+                        </div>
+                        <div class="price-input-item">
+                            <label><input type="checkbox" id="enableQuarter" checked> 按季度</label>
+                            <input type="number" id="priceQuarter" class="form-input" placeholder="季度价格">
+                        </div>
+                        <div class="price-input-item">
+                            <label><input type="checkbox" id="enableYear"> 按年</label>
+                            <input type="number" id="priceYear" class="form-input" placeholder="年价格">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" onclick="addPrice()">添加服务</button>
+                
+                <div id="adminPriceList" class="item-list"></div>
+            </div>
+
+            <!-- 活动管理 -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">优惠活动管理</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">活动类型</label>
+                    <div class="activity-type-select" id="activityTypeSelect">
+                        <label class="activity-type-option" onclick="selectActivityType('discount')">
+                            <input type="radio" name="activityType" value="discount">
+                            🏷️ 折扣优惠
+                        </label>
+                        <label class="activity-type-option" onclick="selectActivityType('fullcut')">
+                            <input type="radio" name="activityType" value="fullcut">
+                            💰 满减活动
+                        </label>
+                        <label class="activity-type-option" onclick="selectActivityType('recharge')">
+                            <input type="radio" name="activityType" value="recharge">
+                            💳 充值优惠
+                        </label>
+                        <label class="activity-type-option" onclick="selectActivityType('special')">
+                            <input type="radio" name="activityType" value="special">
+                            ⭐ 特别活动
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 折扣优惠字段 -->
+                <div class="dynamic-fields" id="discountFields">
+                    <div class="form-group">
+                        <label class="form-label">折扣对象</label>
+                        <select id="discountTarget" class="form-input">
+                            <option value="all">全部服务</option>
+                            <option value="category">指定分类</option>
+                            <option value="service">指定服务</option>
+                            <option value="staff">指定监督员</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="discountTargetDetail" style="display:none;">
+                        <label class="form-label">选择对象</label>
+                        <select id="discountTargetSelect" class="form-input"></select>
+                    </div>
+                    <div class="field-row">
+                        <div class="form-group">
+                            <label class="form-label">折扣（如8折填80）</label>
+                            <input type="number" id="discountValue" class="form-input" placeholder="80" min="1" max="99">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">折扣标签显示</label>
+                            <input type="text" id="discountLabel" class="form-input" placeholder="如：8折、立减20%">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 满减活动字段 -->
+                <div class="dynamic-fields" id="fullcutFields">
+                    <div class="field-row">
+                        <div class="form-group">
+                            <label class="form-label">满多少元</label>
+                            <input type="number" id="fullcutThreshold" class="form-input" placeholder="100">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">减多少元</label>
+                            <input type="number" id="fullcutAmount" class="form-input" placeholder="20">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">可叠加（多档满减，每行一个，格式：满100减10）</label>
+                        <textarea id="fullcutLevels" class="form-textarea" placeholder="满100减10&#10;满200减30&#10;满500减100"></textarea>
+                    </div>
+                </div>
+
+                <!-- 充值优惠字段 -->
+                <div class="dynamic-fields" id="rechargeFields">
+                    <div class="form-group">
+                        <label class="form-label">充值档位（每行一个，格式：充值金额,赠送金额）</label>
+                        <textarea id="rechargeLevels" class="form-textarea" placeholder="500,50&#10;1000,150&#10;2000,400"></textarea>
+                    </div>
+                </div>
+
+                <!-- 特别活动字段 -->
+                <div class="dynamic-fields" id="specialFields">
+                    <div class="form-group">
+                        <label class="form-label">活动亮点/标签</label>
+                        <input type="text" id="specialBadge" class="form-input" placeholder="如：限时特惠、新人专享">
+                    </div>
+                </div>
+
+                <!-- 通用字段 -->
+                <div class="form-group">
+                    <label class="form-label">活动标题</label>
+                    <input type="text" id="activityTitle" class="form-input" placeholder="如：新春特惠、开学季大促">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">活动描述</label>
+                    <textarea id="activityDesc" class="form-textarea" placeholder="详细描述活动内容"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">活动规则（每行一条）</label>
+                    <textarea id="activityRules" class="form-textarea" placeholder="活动期间下单即享优惠&#10;不与其他优惠同享&#10;最终解释权归本店所有"></textarea>
+                </div>
+                <div class="field-row">
+                    <div class="form-group">
+                        <label class="form-label">开始时间</label>
+                        <input type="datetime-local" id="activityStartTime" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">结束时间</label>
+                        <input type="datetime-local" id="activityEndTime" class="form-input">
+                    </div>
+                </div>
+                <button class="btn" onclick="addActivity()">添加活动</button>
+                
+                <div id="adminActivityList" class="item-list"></div>
+            </div>
+
+            <!-- 支付码管理 -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">支付码管理</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">微信收款码</label>
+                    <div class="file-upload">
+                        <input type="file" id="wechatFile" class="file-input" accept="image/*" onchange="uploadQR('wechat')">
+                        <label for="wechatFile" class="file-label">点击上传图片</label>
+                        <div class="file-preview" id="wechatPreview">
+                            <span style="color: var(--text-secondary); font-size: 0.75rem;">预览</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">支付宝收款码</label>
+                    <div class="file-upload">
+                        <input type="file" id="alipayFile" class="file-input" accept="image/*" onchange="uploadQR('alipay')">
+                        <label for="alipayFile" class="file-label">点击上传图片</label>
+                        <div class="file-preview" id="alipayPreview">
+                            <span style="color: var(--text-secondary); font-size: 0.75rem;">预览</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 密码管理 -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">密码管理</h3>
+                <div class="form-group">
+                    <label class="form-label">当前密码</label>
+                    <input type="password" id="currentPassword" class="form-input" placeholder="请输入当前密码">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">新密码</label>
+                    <input type="password" id="newPassword" class="form-input" placeholder="请输入新密码">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">确认新密码</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="请再次输入新密码">
+                </div>
+                <button class="btn" onclick="changePassword()">修改密码</button>
+                <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 15px; font-style: italic;">默认密码：admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- 登录弹窗 -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-modal">
+            <button class="login-close" onclick="closeLoginModal()">&times;</button>
+            <h3 class="login-title">后台登录</h3>
+            <p class="login-subtitle">ADMIN LOGIN</p>
+            <div class="form-group">
+                <label class="form-label">管理密码</label>
+                <input type="password" id="adminPassword" class="form-input" placeholder="请输入管理密码" onkeypress="handlePasswordKeypress(event)">
+            </div>
+            <button class="btn" style="width: 100%; margin-top: 10px;" onclick="verifyPassword()">确认登录</button>
+            <p id="loginError" class="login-error">密码错误，请重试</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ==================== Supabase 配置 ====================
+        var SUPABASE_URL = 'https://akkmplsevrdbhafvjvfd.supabase.co';
+        var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFra21wbHNldnJkYmhhZnZqdmZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjczNjk1MjksImV4cCI6MjA4Mjk0NTUyOX0.ff_MKrPT_PyO6V8c28D979nFBNtiZxu0t0eCHhnn7gs';
+        
+        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ==================== 数据存储 ====================
+        let appData = {
+            staff: [],
+            categories: [],
+            prices: [],
+            activities: [],
+            qrCodes: { wechat: '', alipay: '' },
+            adminPassword: 'admin123'
+        };
+
+        // 登录状态
+        let isAdminLoggedIn = false;
+        let isLoading = true;
+
+        // ==================== 数据库初始化 ====================
+        async function initDatabase() {
+            showLoading('正在连接云端...');
+            
+            try {
+                // 检查并创建表（通过upsert实现）
+                const { data, error } = await supabaseClient
+                    .from('app_config')
+                    .select('*')
+                    .eq('id', 1)
+                    .single();
+
+                if (error && error.code === 'PGRST116') {
+                    // 表不存在或没数据，需要初始化
+                    console.log('首次使用，初始化数据...');
+                    await initDefaultData();
+                } else if (error && error.code === '42P01') {
+                    // 表不存在，显示提示
+                    showSetupGuide();
+                    return;
+                } else if (data) {
+                    // 加载云端数据
+                    appData = {
+                        staff: data.staff || [],
+                        categories: data.categories || [],
+                        prices: data.prices || [],
+                        activities: data.activities || [],
+                        qrCodes: data.qr_codes || { wechat: '', alipay: '' },
+                        adminPassword: data.admin_password || 'admin123'
+                    };
+                }
+
+                hideLoading();
+                renderAll();
+                
+            } catch (err) {
+                console.error('数据库连接失败:', err);
+                showToast('云端连接失败，使用本地数据');
+                loadFromLocalStorage();
+                hideLoading();
+                renderAll();
+            }
+        }
+
+        // 初始化默认数据
+        async function initDefaultData() {
+            const defaultData = {
+                id: 1,
+                staff: [
+                    { id: 1, name: '林清雅', title: '高级监督员', bio: '十年教育行业深耕，专注于学习方法与时间管理，帮助上千名学员提升学习效率，实现自我突破。', avatar: '' },
+                    { id: 2, name: '陈墨言', title: '资深监督员', bio: '毕业于顶尖学府，精通各类考试技巧与备考策略，善于针对性制定学习计划，因材施教。', avatar: '' }
+                ],
+                prices: [
+                    { id: 1, categoryId: 1, name: '基础督学服务', desc: '每周三次学习跟进，含作业检查与答疑', priceDay: 15, priceMonth: 299, priceQuarter: 799, priceYear: 0 },
+                    { id: 2, categoryId: 1, name: '进阶督学服务', desc: '每日学习跟进，含一对一辅导与规划', priceDay: 25, priceMonth: 599, priceQuarter: 1599, priceYear: 0 },
+                    { id: 3, categoryId: 2, name: 'VIP私人定制', desc: '全程一对一专属督导，个性化学习方案', priceDay: 50, priceMonth: 1299, priceQuarter: 3499, priceYear: 0 }
+                ],
+                categories: [
+                    { id: 1, name: '基础督学', desc: '适合日常学习监督' },
+                    { id: 2, name: 'VIP专属', desc: '高端定制服务' }
+                ],
+                activities: [],
+                qr_codes: { wechat: '', alipay: '' },
+                admin_password: 'admin123'
+            };
+
+            const { error } = await supabaseClient
+                .from('app_config')
+                .upsert(defaultData);
+
+            if (!error) {
+                appData = {
+                    staff: defaultData.staff,
+                    categories: defaultData.categories,
+                    prices: defaultData.prices,
+                    activities: defaultData.activities,
+                    qrCodes: defaultData.qr_codes,
+                    adminPassword: defaultData.admin_password
+                };
+            }
+        }
+
+        // 显示数据库设置指南
+        function showSetupGuide() {
+            hideLoading();
+            const guide = document.createElement('div');
+            guide.className = 'setup-guide';
+            guide.innerHTML = `
+                <div class="setup-modal">
+                    <h3>⚙️ 首次设置</h3>
+                    <p>请在 Supabase 中创建数据表：</p>
+                    <ol>
+                        <li>进入 Supabase 控制台</li>
+                        <li>点击左侧 <strong>SQL Editor</strong></li>
+                        <li>复制并运行以下 SQL：</li>
+                    </ol>
+                    <pre>
+CREATE TABLE app_config (
+  id INT PRIMARY KEY DEFAULT 1,
+  staff JSONB DEFAULT '[]',
+  categories JSONB DEFAULT '[]',
+  prices JSONB DEFAULT '[]',
+  activities JSONB DEFAULT '[]',
+  qr_codes JSONB DEFAULT '{}',
+  admin_password TEXT DEFAULT 'admin123',
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+ALTER TABLE app_config ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow all" ON app_config
+  FOR ALL USING (true) WITH CHECK (true);
+
+INSERT INTO app_config (id) VALUES (1);
+                    </pre>
+                    <button class="btn" onclick="location.reload()">完成后刷新页面</button>
+                </div>
+            `;
+            document.body.appendChild(guide);
+        }
+
+        // ==================== 云端同步 ====================
+        async function saveToCloud() {
+            showToast('正在同步...');
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('app_config')
+                    .update({
+                        staff: appData.staff,
+                        categories: appData.categories,
+                        prices: appData.prices,
+                        activities: appData.activities,
+                        qr_codes: appData.qrCodes,
+                        admin_password: appData.adminPassword,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', 1);
+
+                if (error) throw error;
+                
+                // 同时保存到本地作为备份
+                saveToLocalStorage();
+                showToast('同步成功 ✓');
+                
+            } catch (err) {
+                console.error('同步失败:', err);
+                showToast('同步失败，已保存到本地');
+                saveToLocalStorage();
+            }
+        }
+
+        // 本地存储备份
+        function saveToLocalStorage() {
+            localStorage.setItem('studySupervisorData', JSON.stringify(appData));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('studySupervisorData');
+            if (saved) {
+                appData = JSON.parse(saved);
+            }
+        }
+
+        // ==================== 加载状态 ====================
+        function showLoading(text = '加载中...') {
+            let loader = document.getElementById('globalLoader');
+            if (!loader) {
+                loader = document.createElement('div');
+                loader.id = 'globalLoader';
+                loader.innerHTML = `
+                    <div class="loader-content">
+                        <div class="loader-spinner"></div>
+                        <p class="loader-text">${text}</p>
+                    </div>
+                `;
+                document.body.appendChild(loader);
+            } else {
+                loader.querySelector('.loader-text').textContent = text;
+                loader.style.display = 'flex';
+            }
+        }
+
+        function hideLoading() {
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                loader.style.display = 'none';
+            }
+            isLoading = false;
+        }
+
+        // ==================== 渲染函数 ====================
+        function renderAll() {
+            renderStaffList();
+            renderPriceList();
+            renderActivityList();
+            renderAdminLists();
+            loadQRCodes();
+        }
+
+        function renderStaffList() {
+            const container = document.getElementById('staffList');
+            if (!container) return;
+            
+            if (appData.staff.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">暂无监督员信息</p>';
+                return;
+            }
+            
+            container.innerHTML = appData.staff.map(s => `
+                <div class="staff-card">
+                    <div class="staff-avatar">
+                        ${s.avatar ? `<img src="${s.avatar}" alt="${s.name}">` : `<span class="staff-avatar-placeholder">${s.name.charAt(0)}</span>`}
+                    </div>
+                    <div class="staff-info">
+                        <h3 class="staff-name">${s.name}</h3>
+                        <p class="staff-title">${s.title}</p>
+                        <p class="staff-bio">${s.bio}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPriceList() {
+            const container = document.getElementById('priceList');
+            if (!container) return;
+            
+            if (appData.categories.length === 0 && appData.prices.length === 0) {
+                container.innerHTML = '<p class="no-category-hint">暂无价格信息，请在后台添加</p>';
+                return;
+            }
+
+            // 按分类分组显示
+            let html = '';
+            
+            appData.categories.forEach(cat => {
+                const categoryPrices = appData.prices.filter(p => p.categoryId === cat.id);
+                if (categoryPrices.length === 0) return;
+                
+                html += `
+                    <div class="price-category">
+                        <div class="category-header">
+                            <div>
+                                <h3 class="category-title">${cat.name}</h3>
+                                <p class="category-desc">${cat.desc}</p>
+                            </div>
+                        </div>
+                        <div class="price-items">
+                            ${categoryPrices.map(p => renderPriceCard(p)).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 未分类的价格
+            const uncategorized = appData.prices.filter(p => !p.categoryId || !appData.categories.find(c => c.id === p.categoryId));
+            if (uncategorized.length > 0) {
+                html += `
+                    <div class="price-category">
+                        <div class="category-header">
+                            <div>
+                                <h3 class="category-title">其他服务</h3>
+                                <p class="category-desc">更多督学服务</p>
+                            </div>
+                        </div>
+                        <div class="price-items">
+                            ${uncategorized.map(p => renderPriceCard(p)).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html || '<p class="no-category-hint">暂无价格信息</p>';
+        }
+
+        function renderPriceCard(p) {
+            const hasPeriods = p.priceDay || p.priceMonth || p.priceQuarter || p.priceYear;
+            
+            if (hasPeriods) {
+                let periodsHtml = '';
+                if (p.priceDay) periodsHtml += `<div class="price-item"><div class="price-label">天</div><div class="price-value">¥${p.priceDay}</div></div>`;
+                if (p.priceMonth) periodsHtml += `<div class="price-item"><div class="price-label">月</div><div class="price-value">¥${p.priceMonth}</div></div>`;
+                if (p.priceQuarter) periodsHtml += `<div class="price-item"><div class="price-label">季度</div><div class="price-value">¥${p.priceQuarter}</div></div>`;
+                if (p.priceYear) periodsHtml += `<div class="price-item"><div class="price-label">年</div><div class="price-value">¥${p.priceYear}</div></div>`;
+                
+                return `
+                    <div class="price-card">
+                        <div class="price-info">
+                            <h3>${p.name}</h3>
+                            <p>${p.desc}</p>
+                        </div>
+                        <div class="price-amounts">
+                            ${periodsHtml}
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="price-card">
+                        <div class="price-card-header">
+                            <div class="price-info">
+                                <h3>${p.name}</h3>
+                                <p>${p.desc}</p>
+                            </div>
+                            <div class="price-single">
+                                <div class="price-amount">¥${p.price || 0}<span>/月</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderAdminLists() {
+            const staffContainer = document.getElementById('adminStaffList');
+            if (staffContainer) {
+                staffContainer.innerHTML = appData.staff.map(s => `
+                    <div class="item-card">
+                        <div class="item-content">
+                            <h4>${s.name} - ${s.title}</h4>
+                            <p>${s.bio}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-small" onclick="editStaff(${s.id})">编辑</button>
+                            <button class="btn btn-small btn-danger" onclick="deleteStaff(${s.id})">删除</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // 分类列表
+            const categoryContainer = document.getElementById('adminCategoryList');
+            if (categoryContainer) {
+                categoryContainer.innerHTML = appData.categories.map(c => `
+                    <div class="item-card">
+                        <div class="item-content">
+                            <h4>${c.name}</h4>
+                            <p>${c.desc}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-small" onclick="editCategory(${c.id})">编辑</button>
+                            <button class="btn btn-small btn-danger" onclick="deleteCategory(${c.id})">删除</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // 更新分类下拉框
+            const categorySelect = document.getElementById('priceCategory');
+            if (categorySelect) {
+                categorySelect.innerHTML = appData.categories.length > 0 
+                    ? appData.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+                    : '<option value="">请先添加分类</option>';
+            }
+
+            const priceContainer = document.getElementById('adminPriceList');
+            if (priceContainer) {
+                priceContainer.innerHTML = appData.prices.map(p => {
+                    const cat = appData.categories.find(c => c.id === p.categoryId);
+                    const catName = cat ? cat.name : '未分类';
+                    let priceText = [];
+                    if (p.priceDay) priceText.push(`天¥${p.priceDay}`);
+                    if (p.priceMonth) priceText.push(`月¥${p.priceMonth}`);
+                    if (p.priceQuarter) priceText.push(`季¥${p.priceQuarter}`);
+                    if (p.priceYear) priceText.push(`年¥${p.priceYear}`);
+                    if (p.price && priceText.length === 0) priceText.push(`¥${p.price}/月`);
+                    
+                    return `
+                        <div class="item-card">
+                            <div class="item-content">
+                                <h4>[${catName}] ${p.name}</h4>
+                                <p>${p.desc}</p>
+                                <p style="color: var(--accent); margin-top: 5px;">${priceText.join(' | ')}</p>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-small" onclick="editPrice(${p.id})">编辑</button>
+                                <button class="btn btn-small btn-danger" onclick="deletePrice(${p.id})">删除</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // 活动列表
+            const activityContainer = document.getElementById('adminActivityList');
+            if (activityContainer) {
+                activityContainer.innerHTML = appData.activities.map(a => {
+                    const status = getActivityStatus(a);
+                    const statusText = getActivityStatusText(status);
+                    const typeText = getActivityTypeText(a.type);
+                    
+                    return `
+                        <div class="item-card">
+                            <div class="item-content">
+                                <h4>[${typeText}] ${a.title} <span style="font-size:0.75rem;color:${status === 'active' ? '#2ecc71' : status === 'upcoming' ? '#3498db' : '#95a5a6'}">(${statusText})</span></h4>
+                                <p>${a.desc || '无描述'}</p>
+                                <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 5px;">
+                                    ${formatDateTime(a.startTime)} 至 ${formatDateTime(a.endTime)}
+                                </p>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-small btn-danger" onclick="deleteActivity(${a.id})">删除</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function loadQRCodes() {
+            ['wechat', 'alipay'].forEach(type => {
+                const preview = document.getElementById(type + 'Preview');
+                const qrImg = document.getElementById(type + '-qr');
+                const placeholder = document.getElementById(type + '-placeholder');
+                
+                if (appData.qrCodes[type]) {
+                    if (preview) preview.innerHTML = `<img src="${appData.qrCodes[type]}" alt="${type}">`;
+                    if (qrImg) {
+                        qrImg.src = appData.qrCodes[type];
+                        qrImg.style.display = 'block';
+                    }
+                    if (placeholder) placeholder.style.display = 'none';
+                }
+            });
+        }
+
+        // ==================== 登录相关 ====================
+        function checkAdminLogin(event) {
+            if (!isAdminLoggedIn) {
+                event.preventDefault();
+                event.stopPropagation();
+                showLoginModal();
+                return false;
+            }
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginOverlay').classList.add('show');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').classList.remove('show');
+            setTimeout(() => document.getElementById('adminPassword').focus(), 100);
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginOverlay').classList.remove('show');
+        }
+
+        function handlePasswordKeypress(event) {
+            if (event.key === 'Enter') {
+                verifyPassword();
+            }
+        }
+
+        function verifyPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === appData.adminPassword) {
+                isAdminLoggedIn = true;
+                closeLoginModal();
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.mobile-nav-item').forEach(l => l.classList.remove('active'));
+                document.querySelector('[data-page="admin"].nav-link')?.classList.add('active');
+                document.querySelector('[data-page="admin"].mobile-nav-item')?.classList.add('active');
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('admin').classList.add('active');
+                
+                showToast('登录成功');
+            } else {
+                document.getElementById('loginError').classList.add('show');
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        }
+
+        // ==================== 监督员管理 ====================
+        let currentStaffAvatar = '';
+        
+        function previewStaffAvatar() {
+            const file = document.getElementById('staffAvatar').files[0];
+            if (!file) return;
+
+            // 压缩图片
+            compressImage(file, 200, 0.8).then(dataUrl => {
+                currentStaffAvatar = dataUrl;
+                const preview = document.getElementById('staffAvatarPreview');
+                preview.innerHTML = `<img src="${currentStaffAvatar}" alt="头像预览" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            });
+        }
+
+        async function addStaff() {
+            const name = document.getElementById('staffName').value.trim();
+            const title = document.getElementById('staffTitle').value.trim();
+            const bio = document.getElementById('staffBio').value.trim();
+
+            if (!name || !title || !bio) {
+                showToast('请填写完整信息');
+                return;
+            }
+
+            const newId = appData.staff.length > 0 ? Math.max(...appData.staff.map(s => s.id)) + 1 : 1;
+            appData.staff.push({ id: newId, name, title, bio, avatar: currentStaffAvatar });
+            
+            await saveToCloud();
+            renderStaffList();
+            renderAdminLists();
+            
+            document.getElementById('staffName').value = '';
+            document.getElementById('staffTitle').value = '';
+            document.getElementById('staffBio').value = '';
+            document.getElementById('staffAvatar').value = '';
+            document.getElementById('staffAvatarPreview').innerHTML = '<span style="color: var(--text-secondary); font-size: 0.75rem;">预览</span>';
+            currentStaffAvatar = '';
+        }
+
+        function editStaff(id) {
+            const staff = appData.staff.find(s => s.id === id);
+            if (staff) {
+                document.getElementById('staffName').value = staff.name;
+                document.getElementById('staffTitle').value = staff.title;
+                document.getElementById('staffBio').value = staff.bio;
+                if (staff.avatar) {
+                    currentStaffAvatar = staff.avatar;
+                    document.getElementById('staffAvatarPreview').innerHTML = `<img src="${staff.avatar}" alt="头像预览" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                }
+                deleteStaff(id, true);
+                showToast('请修改后重新添加');
+            }
+        }
+
+        async function deleteStaff(id, silent = false) {
+            appData.staff = appData.staff.filter(s => s.id !== id);
+            await saveToCloud();
+            renderStaffList();
+            renderAdminLists();
+            if (!silent) showToast('删除成功');
+        }
+
+        // ==================== 分类管理 ====================
+        async function addCategory() {
+            const name = document.getElementById('categoryName').value.trim();
+            const desc = document.getElementById('categoryDesc').value.trim();
+
+            if (!name) {
+                showToast('请输入分类名称');
+                return;
+            }
+
+            const newId = appData.categories.length > 0 ? Math.max(...appData.categories.map(c => c.id)) + 1 : 1;
+            appData.categories.push({ id: newId, name, desc });
+            
+            await saveToCloud();
+            renderPriceList();
+            renderAdminLists();
+            
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryDesc').value = '';
+            showToast('分类添加成功');
+        }
+
+        function editCategory(id) {
+            const cat = appData.categories.find(c => c.id === id);
+            if (cat) {
+                document.getElementById('categoryName').value = cat.name;
+                document.getElementById('categoryDesc').value = cat.desc;
+                deleteCategory(id, true);
+                showToast('请修改后重新添加');
+            }
+        }
+
+        async function deleteCategory(id, silent = false) {
+            appData.categories = appData.categories.filter(c => c.id !== id);
+            await saveToCloud();
+            renderPriceList();
+            renderAdminLists();
+            if (!silent) showToast('删除成功');
+        }
+
+        // ==================== 价格管理 ====================
+        async function addPrice() {
+            const categoryId = parseInt(document.getElementById('priceCategory').value);
+            const name = document.getElementById('serviceName').value.trim();
+            const desc = document.getElementById('serviceDesc').value.trim();
+            
+            const enableDay = document.getElementById('enableDay').checked;
+            const enableMonth = document.getElementById('enableMonth').checked;
+            const enableQuarter = document.getElementById('enableQuarter').checked;
+            const enableYear = document.getElementById('enableYear').checked;
+            
+            const priceDay = enableDay ? parseInt(document.getElementById('priceDay').value) || 0 : 0;
+            const priceMonth = enableMonth ? parseInt(document.getElementById('priceMonth').value) || 0 : 0;
+            const priceQuarter = enableQuarter ? parseInt(document.getElementById('priceQuarter').value) || 0 : 0;
+            const priceYear = enableYear ? parseInt(document.getElementById('priceYear').value) || 0 : 0;
+
+            if (!name || !desc) {
+                showToast('请填写服务名称和描述');
+                return;
+            }
+            
+            if (!priceDay && !priceMonth && !priceQuarter && !priceYear) {
+                showToast('请至少设置一个价格');
+                return;
+            }
+
+            const newId = appData.prices.length > 0 ? Math.max(...appData.prices.map(p => p.id)) + 1 : 1;
+            appData.prices.push({ 
+                id: newId, 
+                categoryId,
+                name, 
+                desc, 
+                priceDay,
+                priceMonth,
+                priceQuarter,
+                priceYear
+            });
+            
+            await saveToCloud();
+            renderPriceList();
+            renderAdminLists();
+            
+            // 清空表单
+            document.getElementById('serviceName').value = '';
+            document.getElementById('serviceDesc').value = '';
+            document.getElementById('priceDay').value = '';
+            document.getElementById('priceMonth').value = '';
+            document.getElementById('priceQuarter').value = '';
+            document.getElementById('priceYear').value = '';
+            
+            showToast('服务添加成功');
+        }
+
+        function editPrice(id) {
+            const price = appData.prices.find(p => p.id === id);
+            if (price) {
+                document.getElementById('priceCategory').value = price.categoryId || '';
+                document.getElementById('serviceName').value = price.name;
+                document.getElementById('serviceDesc').value = price.desc;
+                
+                document.getElementById('enableDay').checked = !!price.priceDay;
+                document.getElementById('enableMonth').checked = !!price.priceMonth;
+                document.getElementById('enableQuarter').checked = !!price.priceQuarter;
+                document.getElementById('enableYear').checked = !!price.priceYear;
+                
+                document.getElementById('priceDay').value = price.priceDay || '';
+                document.getElementById('priceMonth').value = price.priceMonth || '';
+                document.getElementById('priceQuarter').value = price.priceQuarter || '';
+                document.getElementById('priceYear').value = price.priceYear || '';
+                
+                deletePrice(id, true);
+                showToast('请修改后重新添加');
+            }
+        }
+
+        async function deletePrice(id, silent = false) {
+            appData.prices = appData.prices.filter(p => p.id !== id);
+            await saveToCloud();
+            renderPriceList();
+            renderAdminLists();
+            if (!silent) showToast('删除成功');
+        }
+
+        // ==================== 活动管理 ====================
+        let currentActivityType = '';
+
+        function selectActivityType(type) {
+            currentActivityType = type;
+            
+            // 更新选中状态
+            document.querySelectorAll('.activity-type-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // 隐藏所有动态字段
+            document.querySelectorAll('.dynamic-fields').forEach(f => f.classList.remove('show'));
+            
+            // 显示对应字段
+            const fieldId = type + 'Fields';
+            const field = document.getElementById(fieldId);
+            if (field) field.classList.add('show');
+            
+            // 折扣类型的特殊处理
+            if (type === 'discount') {
+                updateDiscountTargetOptions();
+            }
+        }
+
+        function updateDiscountTargetOptions() {
+            const target = document.getElementById('discountTarget');
+            const detailDiv = document.getElementById('discountTargetDetail');
+            const select = document.getElementById('discountTargetSelect');
+            
+            target.onchange = function() {
+                const val = this.value;
+                if (val === 'all') {
+                    detailDiv.style.display = 'none';
+                } else {
+                    detailDiv.style.display = 'block';
+                    let options = '';
+                    if (val === 'category') {
+                        options = appData.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+                    } else if (val === 'service') {
+                        options = appData.prices.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+                    } else if (val === 'staff') {
+                        options = appData.staff.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                    }
+                    select.innerHTML = options || '<option value="">暂无数据</option>';
+                }
+            };
+        }
+
+        async function addActivity() {
+            if (!currentActivityType) {
+                showToast('请选择活动类型');
+                return;
+            }
+
+            const title = document.getElementById('activityTitle').value.trim();
+            const desc = document.getElementById('activityDesc').value.trim();
+            const rulesText = document.getElementById('activityRules').value.trim();
+            const startTime = document.getElementById('activityStartTime').value;
+            const endTime = document.getElementById('activityEndTime').value;
+
+            if (!title) {
+                showToast('请输入活动标题');
+                return;
+            }
+
+            const rules = rulesText ? rulesText.split('\n').filter(r => r.trim()) : [];
+
+            const activity = {
+                id: appData.activities.length > 0 ? Math.max(...appData.activities.map(a => a.id)) + 1 : 1,
+                type: currentActivityType,
+                title,
+                desc,
+                rules,
+                startTime,
+                endTime,
+                createdAt: new Date().toISOString()
+            };
+
+            // 根据类型添加特定字段
+            if (currentActivityType === 'discount') {
+                activity.discountTarget = document.getElementById('discountTarget').value;
+                activity.discountTargetId = document.getElementById('discountTargetSelect').value;
+                activity.discountValue = parseInt(document.getElementById('discountValue').value) || 0;
+                activity.discountLabel = document.getElementById('discountLabel').value || (activity.discountValue / 10 + '折');
+            } else if (currentActivityType === 'fullcut') {
+                activity.fullcutThreshold = parseInt(document.getElementById('fullcutThreshold').value) || 0;
+                activity.fullcutAmount = parseInt(document.getElementById('fullcutAmount').value) || 0;
+                const levelsText = document.getElementById('fullcutLevels').value.trim();
+                activity.fullcutLevels = levelsText ? levelsText.split('\n').filter(l => l.trim()) : [];
+            } else if (currentActivityType === 'recharge') {
+                const levelsText = document.getElementById('rechargeLevels').value.trim();
+                activity.rechargeLevels = [];
+                if (levelsText) {
+                    levelsText.split('\n').forEach(line => {
+                        const parts = line.split(',');
+                        if (parts.length === 2) {
+                            activity.rechargeLevels.push({
+                                amount: parseInt(parts[0]) || 0,
+                                bonus: parseInt(parts[1]) || 0
+                            });
+                        }
+                    });
+                }
+            } else if (currentActivityType === 'special') {
+                activity.specialBadge = document.getElementById('specialBadge').value || '特别活动';
+            }
+
+            appData.activities.push(activity);
+            await saveToCloud();
+            renderActivityList();
+            renderAdminLists();
+            clearActivityForm();
+            showToast('活动添加成功');
+        }
+
+        function clearActivityForm() {
+            currentActivityType = '';
+            document.querySelectorAll('.activity-type-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.dynamic-fields').forEach(f => f.classList.remove('show'));
+            document.getElementById('activityTitle').value = '';
+            document.getElementById('activityDesc').value = '';
+            document.getElementById('activityRules').value = '';
+            document.getElementById('activityStartTime').value = '';
+            document.getElementById('activityEndTime').value = '';
+            document.getElementById('discountValue').value = '';
+            document.getElementById('discountLabel').value = '';
+            document.getElementById('fullcutThreshold').value = '';
+            document.getElementById('fullcutAmount').value = '';
+            document.getElementById('fullcutLevels').value = '';
+            document.getElementById('rechargeLevels').value = '';
+            document.getElementById('specialBadge').value = '';
+        }
+
+        async function deleteActivity(id, silent = false) {
+            appData.activities = appData.activities.filter(a => a.id !== id);
+            await saveToCloud();
+            renderActivityList();
+            renderAdminLists();
+            if (!silent) showToast('删除成功');
+        }
+
+        function getActivityStatus(activity) {
+            const now = new Date();
+            const start = activity.startTime ? new Date(activity.startTime) : null;
+            const end = activity.endTime ? new Date(activity.endTime) : null;
+            
+            if (end && now > end) return 'ended';
+            if (start && now < start) return 'upcoming';
+            return 'active';
+        }
+
+        function getActivityStatusText(status) {
+            const texts = {
+                'active': '进行中',
+                'upcoming': '即将开始',
+                'ended': '已结束'
+            };
+            return texts[status] || '进行中';
+        }
+
+        function getActivityTypeText(type) {
+            const texts = {
+                'discount': '折扣优惠',
+                'fullcut': '满减活动',
+                'recharge': '充值优惠',
+                'special': '特别活动'
+            };
+            return texts[type] || '活动';
+        }
+
+        function formatDateTime(dateStr) {
+            if (!dateStr) return '不限';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('zh-CN') + ' ' + date.toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+        }
+
+        function renderActivityList() {
+            const container = document.getElementById('activityList');
+            if (!container) return;
+
+            if (appData.activities.length === 0) {
+                container.innerHTML = '<p class="no-activity-hint">暂无优惠活动，敬请期待</p>';
+                return;
+            }
+
+            // 按状态排序：进行中 > 即将开始 > 已结束
+            const sortedActivities = [...appData.activities].sort((a, b) => {
+                const statusOrder = { 'active': 0, 'upcoming': 1, 'ended': 2 };
+                return statusOrder[getActivityStatus(a)] - statusOrder[getActivityStatus(b)];
+            });
+
+            container.innerHTML = sortedActivities.map(a => {
+                const status = getActivityStatus(a);
+                const isExpired = status === 'ended';
+                
+                let badgeContent = '';
+                if (a.type === 'discount') {
+                    badgeContent = a.discountLabel || (a.discountValue / 10 + '折');
+                } else if (a.type === 'fullcut') {
+                    badgeContent = '满' + a.fullcutThreshold + '减' + a.fullcutAmount;
+                } else if (a.type === 'recharge') {
+                    badgeContent = '充值送';
+                } else if (a.type === 'special') {
+                    badgeContent = a.specialBadge || '特惠';
+                }
+
+                let detailHtml = '';
+                if (a.type === 'discount') {
+                    let targetText = '全部服务';
+                    if (a.discountTarget === 'category') {
+                        const cat = appData.categories.find(c => c.id == a.discountTargetId);
+                        targetText = cat ? cat.name + '分类' : '指定分类';
+                    } else if (a.discountTarget === 'service') {
+                        const svc = appData.prices.find(p => p.id == a.discountTargetId);
+                        targetText = svc ? svc.name : '指定服务';
+                    } else if (a.discountTarget === 'staff') {
+                        const staff = appData.staff.find(s => s.id == a.discountTargetId);
+                        targetText = staff ? staff.name + '监督员' : '指定监督员';
+                    }
+                    detailHtml = `<p style="color: var(--accent); margin-top: 10px;">适用范围：${targetText}</p>`;
+                } else if (a.type === 'fullcut' && a.fullcutLevels && a.fullcutLevels.length > 0) {
+                    detailHtml = `<p style="color: var(--accent); margin-top: 10px;">优惠档位：${a.fullcutLevels.join(' / ')}</p>`;
+                } else if (a.type === 'recharge' && a.rechargeLevels && a.rechargeLevels.length > 0) {
+                    const levelsText = a.rechargeLevels.map(l => `充${l.amount}送${l.bonus}`).join(' / ');
+                    detailHtml = `<p style="color: var(--accent); margin-top: 10px;">${levelsText}</p>`;
+                }
+
+                return `
+                    <div class="activity-card ${isExpired ? 'expired' : ''}">
+                        <div class="activity-header">
+                            <div>
+                                <span class="activity-tag ${a.type}">${getActivityTypeText(a.type)}</span>
+                                <h3 class="activity-title">${a.title}</h3>
+                                <p class="activity-subtitle">${a.desc || ''}</p>
+                            </div>
+                            <div class="activity-badge">${badgeContent}</div>
+                        </div>
+                        <div class="activity-body">
+                            ${detailHtml}
+                            ${a.rules && a.rules.length > 0 ? `
+                                <div class="activity-rules">
+                                    <div class="activity-rules-title">活动规则</div>
+                                    <ul class="activity-rules-list">
+                                        ${a.rules.map(r => `<li>${r}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="activity-footer">
+                            <div class="activity-time">
+                                <span>${formatDateTime(a.startTime)}</span> 至 <span>${formatDateTime(a.endTime)}</span>
+                            </div>
+                            <span class="activity-status ${status}">${getActivityStatusText(status)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== 二维码管理 ====================
+        async function uploadQR(type) {
+            const file = document.getElementById(type + 'File').files[0];
+            if (!file) return;
+
+            showToast('正在上传...');
+            
+            // 压缩图片
+            const dataUrl = await compressImage(file, 400, 0.8);
+            appData.qrCodes[type] = dataUrl;
+            
+            await saveToCloud();
+            
+            const preview = document.getElementById(type + 'Preview');
+            preview.innerHTML = `<img src="${dataUrl}" alt="${type}">`;
+            
+            const qrImg = document.getElementById(type + '-qr');
+            const placeholder = document.getElementById(type + '-placeholder');
+            qrImg.src = dataUrl;
+            qrImg.style.display = 'block';
+            placeholder.style.display = 'none';
+        }
+
+        // ==================== 密码管理 ====================
+        async function changePassword() {
+            const currentPwd = document.getElementById('currentPassword').value;
+            const newPwd = document.getElementById('newPassword').value;
+            const confirmPwd = document.getElementById('confirmPassword').value;
+
+            if (!currentPwd || !newPwd || !confirmPwd) {
+                showToast('请填写完整信息');
+                return;
+            }
+
+            if (currentPwd !== appData.adminPassword) {
+                showToast('当前密码错误');
+                return;
+            }
+
+            if (newPwd !== confirmPwd) {
+                showToast('两次输入的新密码不一致');
+                return;
+            }
+
+            if (newPwd.length < 6) {
+                showToast('新密码至少6位');
+                return;
+            }
+
+            appData.adminPassword = newPwd;
+            await saveToCloud();
+
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+
+            showToast('密码修改成功');
+        }
+
+        // ==================== 工具函数 ====================
+        function compressImage(file, maxSize, quality) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        if (width > maxSize || height > maxSize) {
+                            if (width > height) {
+                                height = (height / width) * maxSize;
+                                width = maxSize;
+                            } else {
+                                width = (width / height) * maxSize;
+                                height = maxSize;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+        }
+
+        // ==================== 页面导航 ====================
+        function navigateTo(page) {
+            console.log('导航到:', page);
+            
+            // 后台管理需要登录验证
+            if (page === 'admin' && !isAdminLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            
+            // 移除所有active状态
+            var navLinks = document.querySelectorAll('.nav-link');
+            var mobileItems = document.querySelectorAll('.mobile-nav-item');
+            var pages = document.querySelectorAll('.page');
+            
+            for (var i = 0; i < navLinks.length; i++) {
+                navLinks[i].classList.remove('active');
+            }
+            for (var i = 0; i < mobileItems.length; i++) {
+                mobileItems[i].classList.remove('active');
+            }
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+            
+            // 添加active状态
+            var targetNavLink = document.querySelector('.nav-link[data-page="' + page + '"]');
+            var targetMobileItem = document.querySelector('.mobile-nav-item[data-page="' + page + '"]');
+            var targetPage = document.getElementById(page);
+            
+            if (targetNavLink) targetNavLink.classList.add('active');
+            if (targetMobileItem) targetMobileItem.classList.add('active');
+            if (targetPage) targetPage.classList.add('active');
+        }
+
+        // 绑定导航事件 - 页面加载完成后执行
+        function bindNavigationEvents() {
+            // 桌面端导航
+            var navLinks = document.querySelectorAll('.nav-link');
+            for (var i = 0; i < navLinks.length; i++) {
+                navLinks[i].onclick = function(e) {
+                    e.preventDefault();
+                    var page = this.getAttribute('data-page');
+                    navigateTo(page);
+                };
+            }
+            
+            // 移动端导航
+            var mobileItems = document.querySelectorAll('.mobile-nav-item');
+            for (var i = 0; i < mobileItems.length; i++) {
+                mobileItems[i].onclick = function(e) {
+                    e.preventDefault();
+                    var page = this.getAttribute('data-page');
+                    navigateTo(page);
+                };
+            }
+            
+            // 支付标签
+            var paymentTabs = document.querySelectorAll('.payment-tab');
+            for (var i = 0; i < paymentTabs.length; i++) {
+                paymentTabs[i].onclick = function() {
+                    var payment = this.getAttribute('data-payment');
+                    
+                    var allTabs = document.querySelectorAll('.payment-tab');
+                    var allContents = document.querySelectorAll('.payment-content');
+                    
+                    for (var j = 0; j < allTabs.length; j++) {
+                        allTabs[j].classList.remove('active');
+                    }
+                    for (var j = 0; j < allContents.length; j++) {
+                        allContents[j].classList.remove('active');
+                    }
+                    
+                    this.classList.add('active');
+                    document.getElementById(payment + '-content').classList.add('active');
+                };
+            }
+            
+            console.log('导航事件绑定完成');
+        }
+
+        // ==================== 启动应用 ====================
+        // 确保DOM加载完成后绑定事件
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                bindNavigationEvents();
+                initDatabase();
+            });
+        } else {
+            bindNavigationEvents();
+            initDatabase();
+        }
+    </script>
+</body>
+</html>
